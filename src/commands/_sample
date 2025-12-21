@@ -1,0 +1,14 @@
+import { Message } from "discord.js";
+import { Command, CommandInfos } from "../commands.js";
+
+async function callback(info: CommandInfos, args: string[] = []) {
+    if(info instanceof Message) {
+        info.reply("ping")
+    }
+}
+
+export default ({
+    name: "ping",
+    description: "Test bot's ping i.e latency",
+    callback
+} satisfies Command);
