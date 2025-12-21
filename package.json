@@ -1,0 +1,22 @@
+{
+  "name": "acwoc-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot for AcWoC's Discord server",
+  "main": "src/main.ts",
+  "author": "Person-0",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2"
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "clean": "rimraf dist",
+    "start": "npm run clean && npm run build && node --env-file=.env dist/main.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.25.1"
+  }
+}
