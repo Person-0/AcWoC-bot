@@ -1,4 +1,4 @@
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import { Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
 
 import { CommandsBuilder } from "./commands.js";
 import path from "path";
@@ -17,25 +17,56 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, (readyClient) => {
-    log(`(ready) Logged in as ${readyClient.user.tag}`);
+    log(`logged in as ${readyClient.user.tag}`);
 });
 
 const Commands = new CommandsBuilder();
 const PREFIX = process.env.PREFIX || "!";
-Commands.build(path.join(__dirname, "./commands")).then(() => {
-    log("all commands loaded");
 
+const listenToCommands = () => {
     client.on("messageCreate", (message) => {
         const content = message.content.toLowerCase();
         if (!content.startsWith(PREFIX)) return;
         const [command, ...args] = content.replace(PREFIX, "").split(" ");
 
-        if(Commands.exists(command)) {
+        if (Commands.exists(command)) {
             Commands.execute(command, message, args);
         } else {
             message.reply("Unknown command: `" + command + "`");
         }
     });
-})
 
-client.login(process.env.BTOKEN);
+    client.on(Events.InteractionCreate, async (interaction) => {
+        if (!interaction.isChatInputCommand()) return;
+        const command = Commands.exists(interaction.commandName);
+        if (!command) {
+            console.error(`No command matching ${interaction.commandName} was found.`);
+            return;
+        }
+        try {
+            await Commands.execute(interaction.commandName, interaction, []);
+        } catch (error) {
+            log(error);
+            if (interaction.replied || interaction.deferred) {
+                await interaction.followUp({
+                    content: 'There was an error while executing this command!',
+                    flags: MessageFlags.Ephemeral,
+                });
+            } else {
+                await interaction.reply({
+                    content: 'There was an error while executing this command!',
+                    flags: MessageFlags.Ephemeral,
+                });
+            }
+        }
+    });
+}
+
+Commands.build(path.join(__dirname, "./commands")).then(async() => {
+    await Commands.registerSlashCommands(process.env.CLIENTID, process.env.BTOKEN);
+    log("all commands loaded");
+
+    listenToCommands();
+    client.login(process.env.BTOKEN);
+    log("ready\n");
+});

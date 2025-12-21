@@ -1,4 +1,11 @@
-import { Interaction, Message } from "discord.js";
+import {
+    ChatInputCommandInteraction,
+    Message,
+    RESTPostAPIChatInputApplicationCommandsJSONBody,
+    SlashCommandBuilder,
+    REST,
+    Routes 
+} from "discord.js";
 
 import path from "path";
 import { pathToFileURL } from "url";
@@ -6,7 +13,7 @@ import fs from "fs";
 import { clog } from "./misc/log.js";
 const log = clog("cmds");
 
-export type CommandInfos = Message<boolean> | Interaction;
+export type CommandInfos = Message<boolean> | ChatInputCommandInteraction;
 
 export interface Command {
     name: string;
@@ -16,11 +23,12 @@ export interface Command {
 
 export class CommandsBuilder {
     commands: Record<string, Command> = {};
+    registerCommandsArr: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
     exists(name: string) {
         return !!this.commands[name];
     }
-    
+
     async execute(name: string, info: CommandInfos, args: string[]) {
         await this.commands[name].callback(info, args);
     }
@@ -36,7 +44,25 @@ export class CommandsBuilder {
             const newCommand: Command = (await import(pathToFileURL(commandFile).href)).default;
             this.commands[newCommand.name] = newCommand;
 
+            const cmddata = new SlashCommandBuilder()
+                .setName(newCommand.name)
+                .setDescription(newCommand.description)
+                .toJSON();
+            this.registerCommandsArr.push(cmddata);
+
             log("loaded command:", newCommand.name);
+        }
+    }
+
+    async registerSlashCommands(clientId?: string, token?: string) {
+        if(!token || !clientId) return log("Could not register slash commands: no client id or token provided");
+        const rest = new REST().setToken(token);
+        try {
+            log(`Started refreshing ${this.registerCommandsArr.length} application (/) commands.`);
+            const data = await rest.put(Routes.applicationCommands(clientId), { body: this.registerCommandsArr }) as any[];
+            log(`Successfully reloaded ${data.length} application (/) commands.`);
+        } catch (error) {
+            log(error);
         }
     }
 }
