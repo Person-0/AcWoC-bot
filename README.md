@@ -8,8 +8,9 @@ This is the source code of the AcWoC bot, made for AcWoC's Discord server.
 - `cd` into the root of this repository
 - Make a `.env` file with the following content:
     - ```dotenv
-        PREFIX = "ac."
-        BTOKEN = "<YOUR DISCORD BOT TOKEN>"
+        PREFIX = "a."
+        BTOKEN = "<YOUR BOT TOKEN>"
+        CLIENTID = "<BOT APPLICATION ID>"
       ```
 - Install dependencies:
     - ```bash
