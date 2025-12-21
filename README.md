@@ -20,7 +20,16 @@ This is the source code of the AcWoC bot, made for AcWoC's Discord server.
     - ```bash
         pnpm i
       ```
-- Run the bot:
+- Run the bot (dev):
     - ```bash
         npm start
+      ```
+- Production:
+    - build command:
+      ```bash
+        npm run build
+      ```
+    - start command:
+      ```bash
+        npm run start:prod
       ```
