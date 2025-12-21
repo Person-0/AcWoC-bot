@@ -24,12 +24,20 @@ const Commands = new CommandsBuilder();
 const PREFIX = process.env.PREFIX || "!";
 
 const listenToCommands = () => {
-    client.on("messageCreate", (message) => {
+    client.on("messageCreate", async (message) => {
         const content = message.content.toLowerCase();
         if (!content.startsWith(PREFIX)) return;
         const [command, ...args] = content.replace(PREFIX, "").split(" ");
 
         if (Commands.exists(command)) {
+            try {
+                Commands.execute(command, message, args);
+            } catch (error) {
+                log("message_error:", error);
+                message.reply({
+                    content: 'There was an error while executing this command!'
+                });
+            }
             Commands.execute(command, message, args);
         } else {
             message.reply("Unknown command: `" + command + "`");
@@ -40,29 +48,22 @@ const listenToCommands = () => {
         if (!interaction.isChatInputCommand()) return;
         const command = Commands.exists(interaction.commandName);
         if (!command) {
-            console.error(`No command matching ${interaction.commandName} was found.`);
+            log(`interaction_error: No command matching ${interaction.commandName} was found.`);
             return;
         }
         try {
             await Commands.execute(interaction.commandName, interaction, []);
         } catch (error) {
-            log(error);
-            if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({
-                    content: 'There was an error while executing this command!',
-                    flags: MessageFlags.Ephemeral,
-                });
-            } else {
-                await interaction.reply({
-                    content: 'There was an error while executing this command!',
-                    flags: MessageFlags.Ephemeral,
-                });
-            }
+            log("interaction_error:", error);
+            await interaction.followUp({
+                content: 'There was an error while executing this command!',
+                flags: MessageFlags.Ephemeral,
+            });
         }
     });
 }
 
-Commands.build(path.join(__dirname, "./commands")).then(async() => {
+Commands.build(path.join(__dirname, "./commands")).then(async () => {
     await Commands.registerSlashCommands(process.env.CLIENTID, process.env.BTOKEN);
     log("all commands loaded");
 
