@@ -12,9 +12,11 @@
     "typescript": "^5.9.2"
   },
   "scripts": {
+    "runbuilt": "node --env-file=.env dist/main.js",
     "build": "npx tsc",
     "clean": "rimraf dist",
-    "start": "npm run clean && npm run build && node --env-file=.env dist/main.js"
+    "start": "npm run clean && npm run build && npm run runbuilt",
+    "start:prod": "npm run runbuilt"
   },
   "dependencies": {
     "discord.js": "^14.25.1"
