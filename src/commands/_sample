@@ -3,7 +3,11 @@ import { Command, CommandInfos } from "../commands.js";
 
 async function callback(info: CommandInfos, args: string[] = []) {
     if(info instanceof Message) {
-        info.reply("ping")
+        // text message with prefix
+        info.reply("ping");
+    } else {
+        // slash command
+        info.reply("ping");
     }
 }
 
