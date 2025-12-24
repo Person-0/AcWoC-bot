@@ -24,7 +24,7 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
     if (!username) {
         await info.reply(
             "## **`ERROR`**\n" +
-            "**Invalid username provided.**"
+            "Invalid username provided."
         );
         return;
     }
