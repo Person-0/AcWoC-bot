@@ -19,7 +19,7 @@ Sample usage:
 # Commands
 
 Following commands are available with the discord bot.<br>
-Aliases only work for chat commands.
+> Note: Aliases are available only for chat commands. This is intentional, as it keeps the slash command menu clean and easy to navigate.
 
 - `ping`
   - Shows the time it takes (in milliseconds) for the bot to send a message to discord.
