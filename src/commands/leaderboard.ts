@@ -50,13 +50,21 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
 
         let embed: EmbedBuilder;
         const maxRank = records.length;
+        if (maxRank < 1) {
+            await replymsg.edit(
+                "## **`ERROR`**\n" +
+                "Leaderboard contains no records"
+            );
+            return;
+        }
+
         if (position) {
 
             if (position > maxRank) {
                 await replymsg.edit(
                     "## **`ERROR`**\n" +
                     "**Invalid position argument provided.**\n" +
-                    "Position should be an `integer` not greater than `" + 
+                    "Position should be an `integer` not greater than `" +
                     maxRank.toString() + "`\n"
                 );
                 return;
