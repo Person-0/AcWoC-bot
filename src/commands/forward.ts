@@ -40,6 +40,7 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
 
 export default ({
     name: "forward",
+    aliases: ["send", "say"],
     description: "Forward a predefined message to a channel of your choice",
     options: [
         {

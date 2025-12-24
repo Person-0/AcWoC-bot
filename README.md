@@ -22,10 +22,13 @@ Sample usage:
   - Shows the time it takes (in milliseconds) for the bot to send a message to discord.
 
 - `forward <channel> <message content>`
-  - Forwards a text message supplied as an argument to the command to a channel specified in the command.
+  - Sends a text message supplied as an argument to the command to a channel also specified in the command.
   - Arguments:
-	- ***channel*** can be any text channel's id or direct reference using #channel as long as the bot has permission to send messages in that channel.
-	- ***message content*** limit is 2000 characters, but you should take a margin of ~33 characters since you will not be able to send the command if it exceeds the limit itself, unless you have nitro.
+    - ***channel*** can be any text channel's id or direct reference using #channel as long as the bot has permission to send messages in that channel.
+    - ***message content*** limit is 2000 characters, but you should take a margin of ~33 characters since you will not be able to send the command if it exceeds the limit itself, unless you have nitro.
+  - Aliases:
+    `send`, `say`
+
 
 # Running from Source
 - Ensure you have NodeJS, npm installed.

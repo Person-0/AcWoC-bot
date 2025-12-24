@@ -25,20 +25,24 @@ export interface CommandOption {
 
 export interface Command {
     name: string;
+    aliases?: string[],
     description: string;
     options?: CommandOption[]
     callback: (info: CommandInfos, client: Client, args: string[]) => Promise<void>;
 }
 
 export class CommandsBuilder {
+    aliases: Record<string, string> = {};
     commands: Record<string, Command> = {};
     registerCommandsArr: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 
     exists(name: string) {
-        return !!this.commands[name];
+        return (!!this.aliases[name]) || (!!this.commands[name]);
     }
 
-    async execute(name: string, info: CommandInfos, args: string[], client: Client) {
+    async execute(cname: string, info: CommandInfos, args: string[], client: Client) {
+        let name = cname;
+        if (this.aliases[cname]) name = this.aliases[cname];
         await this.commands[name].callback(info, client, args);
     }
 
@@ -54,37 +58,28 @@ export class CommandsBuilder {
             const newCommand: Command = (
                 await import(pathToFileURL(commandFile).href)
             ).default;
+
+            this.registerCommandsArr.push(
+                getBuiltSlashCommand(newCommand).toJSON()
+            );
             this.commands[newCommand.name] = newCommand;
 
-            const cmddata = new SlashCommandBuilder()
-                .setName(newCommand.name)
-                .setDescription(newCommand.description);
-
-            for(const option of (newCommand.options || [])){
-                switch (option.type) {
-                    case "channel":
-                        cmddata.addChannelOption(
-                            newOp =>
-                                newOp.setName(option.name)
-                                    .setDescription(option.description)
-                                    .setRequired(option.required || false)
-                        );
-                        break;
-                    case "string":
-                    default:
-                        cmddata.addStringOption(
-                            newOp =>
-                                newOp.setName(option.name)
-                                    .setDescription(option.description)
-                                    .setRequired(option.required || false)
-                        );
-                        break;
-                }
+            for (const alias of (newCommand.aliases || [])) {
+                const newcmddata = getBuiltSlashCommand({
+                    ...newCommand,
+                    name: alias
+                });
+                newcmddata.setName(alias);
+                this.registerCommandsArr.push(newcmddata.toJSON());
+                this.aliases[alias] = newCommand.name;
             }
-            
-            this.registerCommandsArr.push(cmddata.toJSON());
 
-            log("loaded command:", newCommand.name);
+            log(
+                "loaded command:",
+                [newCommand.name],
+                " with aliases: ",
+                newCommand.aliases || []
+            );
         }
     }
 
@@ -110,4 +105,33 @@ export class CommandsBuilder {
             log(error);
         }
     }
+}
+
+function getBuiltSlashCommand(command: Command) {
+    const cmddata = new SlashCommandBuilder()
+        .setName(command.name)
+        .setDescription(command.description);
+
+    for (const option of (command.options || [])) {
+        switch (option.type) {
+            case "channel":
+                cmddata.addChannelOption(
+                    newOp =>
+                        newOp.setName(option.name)
+                            .setDescription(option.description)
+                            .setRequired(option.required || false)
+                );
+                break;
+            case "string":
+            default:
+                cmddata.addStringOption(
+                    newOp =>
+                        newOp.setName(option.name)
+                            .setDescription(option.description)
+                            .setRequired(option.required || false)
+                );
+                break;
+        }
+    }
+    return cmddata;
 }
