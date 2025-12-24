@@ -57,7 +57,7 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
                     "## **`ERROR`**\n" +
                     "**Invalid position argument provided.**\n" +
                     "Position should be an `integer` not greater than `" + 
-                    maxRank.toString() + "`"
+                    maxRank.toString() + "`\n"
                 );
                 return;
             }
@@ -75,7 +75,7 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
         replymsg.edit(
             "## **`ERROR`**\n" +
             "**Could not fetch latest leaderboard data: **`" + res.message +
-            "`\nPlease try again later!"
+            "`\nPlease try again later!\n"
         );
     }
 }

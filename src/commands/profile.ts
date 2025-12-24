@@ -29,7 +29,7 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
         return;
     }
 
-    const replymsg = await info.reply("`Fetching userdata...`");
+    const replymsg = await info.reply("`Searching for User Data...`");
 
     const res = await fetchLeaderboard(async function onWakingUp() {
         await replymsg.edit("*`This might take a while, please be patient...`*");
@@ -53,7 +53,7 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
         if (!found) {
             replymsg.edit(
                 "## **`ERROR`**\n" +
-                "**Invalid username provided.**"
+                "No contributor with specified username found.\n"
             );
             return;
         }
@@ -66,7 +66,7 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
         replymsg.edit(
             "## **`ERROR`**\n" +
             "**Could not fetch latest leaderboard data: **`" + res.message +
-            "`\nPlease try again later!"
+            "`\nPlease try again later!\n"
         );
     }
 }
