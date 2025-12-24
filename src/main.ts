@@ -39,7 +39,7 @@ const listenToCommands = () => {
             } catch (error) {
                 log("message_error:", error);
                 message.reply({
-                    content: 'There was an error while executing this command!'
+                    content: "There was an error while executing this command!"
                 });
             }
         } else {
@@ -59,7 +59,7 @@ const listenToCommands = () => {
         } catch (error) {
             log("interaction_error:", error);
             await interaction.followUp({
-                content: 'There was an error while executing this command!',
+                content: "There was an error while executing this command!",
                 flags: MessageFlags.Ephemeral,
             });
         }

@@ -1,7 +1,7 @@
 import { Channel, ChatInputCommandInteraction, Client } from "discord.js";
 import { Command, CommandInfos, CommandOption } from "../commands.js";
 
-import { ParseChannelID } from "../misc/parsers.js";
+import { ParseChannelID } from "../misc/misc.js";
 import { clog } from "../misc/log.js";
 const log = clog("cmd: forward");
 

@@ -5,3 +5,5 @@ desktop.ini
 
 dist
 pnpm-lock.yaml
+
+src/misc/sample_leaderboard.json
