@@ -1,18 +1,12 @@
-import { Message } from "discord.js";
+import { Client } from "discord.js";
 import { Command, CommandInfos } from "../commands.js";
 
-async function callback(info: CommandInfos, args: string[] = []) {
-    if(info instanceof Message) {
-        // text message with prefix
-        info.reply("ping");
-    } else {
-        // slash command
-        info.reply("ping");
-    }
+async function callback(info: CommandInfos, client: Client, args: string[] = []) {
+    
 }
 
 export default ({
-    name: "ping",
-    description: "Test bot's ping i.e latency",
+    name: "commandName", // PREFIXcommandName or /commandName
+    description: "commandDescription",
     callback
 } satisfies Command);
