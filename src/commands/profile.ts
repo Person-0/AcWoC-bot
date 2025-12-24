@@ -42,8 +42,9 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
         const data = res.data;
         const records = data.leaderboard;
 
+        username = username.toLowerCase();
         for (const record of records) {
-            if (record.login === username) {
+            if (record.login.toLowerCase() === username) {
                 found = record;
                 break;
             }
