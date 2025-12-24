@@ -7,9 +7,9 @@
 </div>
 <br>
 This is the source code of the AcWoC bot, made for AcWoC's Discord server.<br>
-The bot supports both slash and text-based commands.
+The bot supports both slash and chat commands.
 
-Text commands prefix: **`a.`**<br>
+Chat commands prefix: **`a.`**<br>
 Sample usage: 
 - **`a.<command_name>`**<br>
 	or
@@ -17,6 +17,9 @@ Sample usage:
 <br><br>
 
 # Commands
+
+Following commands are available with the discord bot.<br>
+Aliases only work for chat commands.
 
 - `ping`
   - Shows the time it takes (in milliseconds) for the bot to send a message to discord.
@@ -28,6 +31,21 @@ Sample usage:
     - ***message content*** limit is 2000 characters, but you should take a margin of ~33 characters since you will not be able to send the command if it exceeds the limit itself, unless you have nitro.
   - Aliases:
     `send`, `say`
+  
+- `profile <username>`
+  - Returns the user profile of the specified contributor
+  - Arguments
+    - ***username*** is the profile name of the contributor
+  - Aliases:
+    `user`, `pf`, `contributor`, `contrib`
+
+- `leaderboard <(optional) rank>`
+  - If rank is specified, returns the user profile of the contributor at that rank.
+  - Otherwise shows the details of the top 3 contributors.
+  - Arguments
+    - ***rank*** (optional) is the rank of the contributor whose profile you want to see
+  - Aliases:
+    `ld`, `leader`, `leaders`
 
 
 # Running from Source
@@ -39,6 +57,8 @@ Sample usage:
         PREFIX = "a."
         BTOKEN = "<YOUR BOT TOKEN>"
         CLIENTID = "<BOT APPLICATION ID>"
+        LEADERBOARD_FETCH_URL = "<LEADERBOARD JSON URL>"
+        BOT_PROFILE_IMG = "<BOT PROFILE PICTURE URL>"
       ```
 - Install dependencies:
     - ```bash
