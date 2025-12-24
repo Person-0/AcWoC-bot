@@ -65,12 +65,6 @@ export class CommandsBuilder {
             this.commands[newCommand.name] = newCommand;
 
             for (const alias of (newCommand.aliases || [])) {
-                const newcmddata = getBuiltSlashCommand({
-                    ...newCommand,
-                    name: alias
-                });
-                newcmddata.setName(alias);
-                this.registerCommandsArr.push(newcmddata.toJSON());
                 this.aliases[alias] = newCommand.name;
             }
 
