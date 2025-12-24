@@ -43,7 +43,7 @@ export async function fetchLeaderboard(wakeCB = () => { }) {
             log("PARSE ERROR:", parsed.error.message);
             return { error: true, message: "PARSE_ERROR" };
         }
-        parsed.data = sampleLead(); // testing only
+        //parsed.data = sampleLead(); // testing only
         return { error: false, data: parsed.data };
     } catch (e) {
         log(e);
