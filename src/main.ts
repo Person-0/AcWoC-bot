@@ -25,20 +25,23 @@ const PREFIX = process.env.PREFIX || "!";
 
 const listenToCommands = () => {
     client.on("messageCreate", async (message) => {
-        const content = message.content.toLowerCase();
-        if (!content.startsWith(PREFIX)) return;
-        const [command, ...args] = content.replace(PREFIX, "").split(" ");
+        let [command, ...args] = message.content.split(" ");
+        command = command.toLowerCase();
+        if (command.startsWith(PREFIX)) {
+            command = command.replace(PREFIX, "");
+        } else {
+            return;
+        }
 
         if (Commands.exists(command)) {
             try {
-                Commands.execute(command, message, args);
+                Commands.execute(command, message, args, client);
             } catch (error) {
                 log("message_error:", error);
                 message.reply({
                     content: 'There was an error while executing this command!'
                 });
             }
-            Commands.execute(command, message, args);
         } else {
             message.reply("Unknown command: `" + command + "`");
         }
@@ -52,7 +55,7 @@ const listenToCommands = () => {
             return;
         }
         try {
-            await Commands.execute(interaction.commandName, interaction, []);
+            await Commands.execute(interaction.commandName, interaction, [], client);
         } catch (error) {
             log("interaction_error:", error);
             await interaction.followUp({

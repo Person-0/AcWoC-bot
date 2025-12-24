@@ -1,6 +1,7 @@
+import { Client } from "discord.js";
 import { Command, CommandInfos } from "../commands.js";
 
-async function callback(info: CommandInfos, args: string[] = []) {
+async function callback(info: CommandInfos, client: Client, args: string[] = []) {
     const init = Date.now();
     const replymsg = await info.reply(":ping_pong: _ _");
     await replymsg.edit(

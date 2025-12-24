@@ -4,7 +4,8 @@ import {
     RESTPostAPIChatInputApplicationCommandsJSONBody,
     SlashCommandBuilder,
     REST,
-    Routes
+    Routes,
+    Client
 } from "discord.js";
 
 import path from "path";
@@ -15,10 +16,18 @@ const log = clog("cmds");
 
 export type CommandInfos = Message<boolean> | ChatInputCommandInteraction;
 
+export interface CommandOption {
+    name: string;
+    description: string;
+    type: 'string' | 'channel';
+    required?: boolean;
+}
+
 export interface Command {
     name: string;
     description: string;
-    callback: (info: CommandInfos, args: string[]) => Promise<void>;
+    options?: CommandOption[]
+    callback: (info: CommandInfos, client: Client, args: string[]) => Promise<void>;
 }
 
 export class CommandsBuilder {
@@ -29,8 +38,8 @@ export class CommandsBuilder {
         return !!this.commands[name];
     }
 
-    async execute(name: string, info: CommandInfos, args: string[]) {
-        await this.commands[name].callback(info, args);
+    async execute(name: string, info: CommandInfos, args: string[], client: Client) {
+        await this.commands[name].callback(info, client, args);
     }
 
     async build(rootdir: string) {
@@ -49,9 +58,31 @@ export class CommandsBuilder {
 
             const cmddata = new SlashCommandBuilder()
                 .setName(newCommand.name)
-                .setDescription(newCommand.description)
-                .toJSON();
-            this.registerCommandsArr.push(cmddata);
+                .setDescription(newCommand.description);
+
+            for(const option of (newCommand.options || [])){
+                switch (option.type) {
+                    case "channel":
+                        cmddata.addChannelOption(
+                            newOp =>
+                                newOp.setName(option.name)
+                                    .setDescription(option.description)
+                                    .setRequired(option.required || false)
+                        );
+                        break;
+                    case "string":
+                    default:
+                        cmddata.addStringOption(
+                            newOp =>
+                                newOp.setName(option.name)
+                                    .setDescription(option.description)
+                                    .setRequired(option.required || false)
+                        );
+                        break;
+                }
+            }
+            
+            this.registerCommandsArr.push(cmddata.toJSON());
 
             log("loaded command:", newCommand.name);
         }
