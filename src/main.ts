@@ -64,7 +64,9 @@ const listenToCommands = () => {
 }
 
 Commands.build(path.join(__dirname, "./commands")).then(async () => {
-    await Commands.registerSlashCommands(process.env.CLIENTID, process.env.BTOKEN);
+    await Commands.registerSlashCommands(
+        process.env.CLIENTID, process.env.BTOKEN
+    );
     log("all commands loaded");
 
     listenToCommands();

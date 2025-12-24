@@ -4,7 +4,7 @@ import {
     RESTPostAPIChatInputApplicationCommandsJSONBody,
     SlashCommandBuilder,
     REST,
-    Routes 
+    Routes
 } from "discord.js";
 
 import path from "path";
@@ -34,14 +34,17 @@ export class CommandsBuilder {
     }
 
     async build(rootdir: string) {
-        if (!(fs.existsSync(rootdir))) throw "Commands directory does not exist";
+        if (!(fs.existsSync(rootdir)))
+            throw "Commands directory does not exist";
 
         const commandFiles = fs.readdirSync(rootdir)
             .filter(e => e.endsWith(".js"))
             .map(e => path.join(rootdir, e));
 
         for (const commandFile of commandFiles) {
-            const newCommand: Command = (await import(pathToFileURL(commandFile).href)).default;
+            const newCommand: Command = (
+                await import(pathToFileURL(commandFile).href)
+            ).default;
             this.commands[newCommand.name] = newCommand;
 
             const cmddata = new SlashCommandBuilder()
@@ -55,12 +58,23 @@ export class CommandsBuilder {
     }
 
     async registerSlashCommands(clientId?: string, token?: string) {
-        if(!token || !clientId) return log("Could not register slash commands: no client id or token provided");
+        if (!token || !clientId) return log(
+            "Could not register slash commands: no client id or token provided"
+        );
         const rest = new REST().setToken(token);
+
         try {
-            log(`Started refreshing ${this.registerCommandsArr.length} application (/) commands.`);
-            const data = await rest.put(Routes.applicationCommands(clientId), { body: this.registerCommandsArr }) as any[];
+
+            log(
+                `Started refreshing ${this.registerCommandsArr.length} application (/) commands.`
+            );
+
+            const data = await rest.put(Routes.applicationCommands(clientId), {
+                body: this.registerCommandsArr
+            }) as any[];
+
             log(`Successfully reloaded ${data.length} application (/) commands.`);
+
         } catch (error) {
             log(error);
         }
