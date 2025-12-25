@@ -2,6 +2,7 @@
 <div>
 	<img style="height: 50px" src="./assets/acwoc-icon.webp">
 	<img style="height: 50px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png">
+  <img style="height: 50px" src="https://zod.dev/logo/logo-glow.png">
 	<img style="height: 50px" src="https://avatars.githubusercontent.com/u/9950313?s=48&v=4">
 	<img style="height: 50px" src="https://avatars.githubusercontent.com/u/26492485?s=48&v=4">
 </div>
