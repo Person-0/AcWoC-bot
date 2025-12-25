@@ -1,4 +1,4 @@
-import { Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
+import { ActivityType, Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
 
 import { CommandsBuilder } from "./commands.js";
 import path from "path";
@@ -18,6 +18,10 @@ const client = new Client({
 
 client.once(Events.ClientReady, (readyClient) => {
     log(`logged in as ${readyClient.user.tag}`);
+
+    readyClient.user.setPresence({
+        status: 'idle'
+    });
 });
 
 const Commands = new CommandsBuilder();
