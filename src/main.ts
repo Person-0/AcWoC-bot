@@ -2,7 +2,7 @@ import { Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import "./misc/health.js"
+import "./misc/health.js";
 import { CommandsBuilder } from "./commands.js";
 import { clog } from "./misc/misc.js";
 
