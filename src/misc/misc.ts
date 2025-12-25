@@ -1,3 +1,8 @@
+const ADMINS = (process.env.ADMINS as string).split(",");
+export function isAdmin(id: string) {
+    return ADMINS.includes(id);
+}
+
 export function clog(label: string) {
     return (...e: any[]) => {
         console.log("["+label+"]", ...e);

@@ -28,7 +28,7 @@ Following commands are available with the discord bot.<br>
 - `ping`
   - Shows the time it takes (in milliseconds) for the bot to send a message to discord.
 
-- `forward <channel> <message content>`
+- `forward <channel> <message content>` (ADMIN ONLY)
   - Sends a text message supplied as an argument to the command to a channel also specified in the command.
   - Arguments:
     - ***channel*** can be any text channel's id or direct reference using #channel as long as the bot has permission to send messages in that channel.
@@ -64,6 +64,7 @@ Following commands are available with the discord bot.<br>
         LEADERBOARD_FETCH_URL = "<LEADERBOARD JSON URL>"
         BOT_PROFILE_IMG = "<BOT PROFILE PICTURE URL>"
         HELP_README_URL = "<LINK TO README.md>"
+        ADMINS = "admin_userid_1,admin_userid_2"
       ```
 - Install dependencies:
     - ```bash

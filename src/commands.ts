@@ -11,7 +11,7 @@ import path from "path";
 import { pathToFileURL } from "url";
 import fs from "fs";
 
-import { clog } from "./misc/misc.js";
+import { clog, isAdmin } from "./misc/misc.js";
 
 const log = clog("cmds");
 
@@ -27,6 +27,7 @@ export interface CommandOption {
 export interface Command {
     name: string;
     aliases?: string[],
+    admin?: boolean,
     description: string;
     options?: CommandOption[]
     callback: (info: CommandInfos, client: Client, args: string[]) => Promise<void>;
@@ -44,7 +45,19 @@ export class CommandsBuilder {
     async execute(cname: string, info: CommandInfos, args: string[], client: Client) {
         let name = cname;
         if (this.aliases[cname]) name = this.aliases[cname];
-        await this.commands[name].callback(info, client, args);
+        const cmd = this.commands[name];
+        if(cmd.admin) {
+            let userID: string;
+            if(info instanceof ChatInputCommandInteraction) {
+                userID = info.user.id;
+            } else {
+                userID = info.author.id;
+            }
+            if(!(isAdmin(userID))){
+                return;
+            }
+        }
+        await cmd.callback(info, client, args);
     }
 
     async build(rootdir: string) {
