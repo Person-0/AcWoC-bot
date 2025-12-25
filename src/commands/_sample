@@ -8,5 +8,7 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
 export default ({
     name: "commandName", // PREFIXcommandName or /commandName
     description: "commandDescription",
+    aliases: [],
+    options: [],
     callback
 } satisfies Command);
