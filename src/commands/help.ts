@@ -9,6 +9,6 @@ async function callback(info: CommandInfos, client: Client, args: string[] = [])
 
 export default ({
     name: "help",
-    description: "help",
+    description: "Replies with the help README.md link",
     callback
 } satisfies Command);
