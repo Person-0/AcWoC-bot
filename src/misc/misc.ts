@@ -1,3 +1,9 @@
+export function clog(label: string) {
+    return (...e: any[]) => {
+        console.log("["+label+"]", ...e);
+    }
+}
+
 export const rankPositionMedals = (rank: number) =>
     rank < 4 ? ["🥇", "🥈", "🥉"][rank - 1] : ""; 
 

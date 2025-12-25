@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { EmbedBuilder } from "discord.js";
 
-import { clog } from "./log.js";
+import { clog } from "./misc.js";
 const log = clog("LEADERBOARD_FETCH");
 
 const leaderboardRecord = z.object({

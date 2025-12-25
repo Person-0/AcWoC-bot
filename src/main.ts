@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import { CommandsBuilder } from "./commands.js";
-import { clog } from "./misc/log.js";
+import { clog } from "./misc/misc.js";
 
 const log = clog("main");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

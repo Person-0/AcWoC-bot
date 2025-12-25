@@ -11,7 +11,7 @@ import path from "path";
 import { pathToFileURL } from "url";
 import fs from "fs";
 
-import { clog } from "./misc/log.js";
+import { clog } from "./misc/misc.js";
 
 const log = clog("cmds");
 
