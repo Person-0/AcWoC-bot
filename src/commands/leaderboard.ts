@@ -116,7 +116,7 @@ function topThreeEmbed(
         name: "\n",
         value: "[*View Full Leaderboard*](https://acwoc.androidclub.tech/)",
         inline: false
-    })
+    });
     embed.addFields(...fields);
     return embed;
 }
