@@ -1,10 +1,10 @@
-import { ActivityType, Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
-
-import { CommandsBuilder } from "./commands.js";
+import { Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import { CommandsBuilder } from "./commands.js";
 import { clog } from "./misc/log.js";
+
 const log = clog("main");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

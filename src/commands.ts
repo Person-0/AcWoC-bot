@@ -7,11 +7,12 @@ import {
     Routes,
     Client
 } from "discord.js";
-
 import path from "path";
 import { pathToFileURL } from "url";
 import fs from "fs";
+
 import { clog } from "./misc/log.js";
+
 const log = clog("cmds");
 
 export type CommandInfos = Message<boolean> | ChatInputCommandInteraction;
