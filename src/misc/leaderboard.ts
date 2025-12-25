@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { EmbedBuilder } from "discord.js";
 
 import { clog } from "./misc.js";
 const log = clog("LEADERBOARD_FETCH");
@@ -48,19 +47,6 @@ export async function fetchLeaderboard(wakeCB = () => { }) {
         log(e);
         return { error: true, message: "WAKE_TIMEOUT_ASSUMPTION" };
     }
-}
-
-export function getBasicEmbed(footerText: string) {
-    const embed = new EmbedBuilder();
-    embed.setAuthor({
-        name: "AcWoC",
-        url: "https://acwoc.androidclub.tech/",
-        iconURL: process.env.BOT_PROFILE_IMG as string,
-    });
-    embed.setThumbnail(process.env.BOT_PROFILE_IMG as string);
-    embed.setColor("#6da3ad");
-    embed.setFooter({ text: footerText });
-    return embed;
 }
 
 async function wakeAndFetch(

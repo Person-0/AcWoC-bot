@@ -2,12 +2,9 @@ import { ChatInputCommandInteraction, Client, EmbedBuilder } from "discord.js";
 import { Command, CommandInfos } from "../commands.js";
 
 import {
-    fetchLeaderboard,
-    getBasicEmbed,
-    LeaderboardRecord
-} from "../misc/leaderboard.js";
+    fetchLeaderboard, LeaderboardRecord } from "../misc/leaderboard.js";
 import { userProfileEmbed } from "./profile.js";
-import { rankPositionMedals } from "../misc/misc.js";
+import { rankPositionMedals, getBasicEmbed } from "../misc/misc.js";
 
 async function callback(info: CommandInfos, client: Client, args: string[] = []) {
     let position = null;
