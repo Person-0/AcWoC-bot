@@ -3,7 +3,7 @@ import { Command, CommandInfos } from "../commands.js";
 
 async function callback(info: CommandInfos, client: Client, args: string[] = []) {
     info.reply(
-        `### [View All Commands](${process.env.HELP_README_URL})`
+        `### [View All Commands](<${process.env.HELP_README_URL}>)`
     );
 }
 
