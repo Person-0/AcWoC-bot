@@ -23,9 +23,9 @@ export function getBasicEmbed(footerText: string) {
     embed.setAuthor({
         name: "AcWoC",
         url: "https://acwoc.androidclub.tech/",
-        iconURL: process.env.BOT_PROFILE_IMG as string,
+        iconURL: process.env.BOT_PROFILE_IMG,
     });
-    embed.setThumbnail(process.env.BOT_PROFILE_IMG as string);
+    embed.setThumbnail(process.env.BOT_PROFILE_IMG || null);
     embed.setColor("#6da3ad");
     embed.setFooter({ text: footerText });
     return embed;

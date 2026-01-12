@@ -62,7 +62,6 @@ Following commands are available with the discord bot.<br>
         BTOKEN = "<YOUR BOT TOKEN>"
         CLIENTID = "<BOT APPLICATION ID>"
         LEADERBOARD_FETCH_URL = "<LEADERBOARD JSON URL>"
-        BOT_PROFILE_IMG = "<BOT PROFILE PICTURE URL>"
         HELP_README_URL = "<LINK TO README.md>"
         ADMINS = "admin_userid_1,admin_userid_2"
       ```

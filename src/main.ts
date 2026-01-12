@@ -23,6 +23,8 @@ client.once(Events.ClientReady, (readyClient) => {
     readyClient.user.setPresence({
         status: 'idle'
     });
+
+    process.env.BOT_PROFILE_IMG = readyClient.user.displayAvatarURL();
 });
 
 const Commands = new CommandsBuilder();
