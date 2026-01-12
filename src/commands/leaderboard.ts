@@ -108,7 +108,7 @@ PRs: \`${record.pr_urls.length}\`
     }
     fields.push({
         name: "\n",
-        value: "[*View Full Leaderboard*](https://acwoc.androidclub.tech/)",
+        value: "[*View Full Leaderboard*](https://acwoc.androidclub.tech/leaderboards/)",
         inline: false
     });
     embed.addFields(...fields);
