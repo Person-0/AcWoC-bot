@@ -3,8 +3,14 @@ import { Command, CommandInfos } from "../commands.js";
 
 import { fetchLeaderboard, LeaderboardRecord } from "../misc/leaderboard.js";
 import { rankPositionMedals, getBasicEmbed } from "../misc/misc.js";
+import ChannelStore from "../misc/channelStore.js";
 
-async function callback(info: CommandInfos, client: Client, args: string[] = []) {
+async function callback(
+    info: CommandInfos,
+    client: Client,
+    args: string[] = [],
+    store: ChannelStore
+) {
     let username: string | null = null;
     if (info instanceof ChatInputCommandInteraction) {
         const pfid = info.options.getString("pfid");

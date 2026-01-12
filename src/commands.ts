@@ -12,6 +12,7 @@ import { pathToFileURL } from "url";
 import fs from "fs";
 
 import { clog, isAdmin } from "./misc/misc.js";
+import ChannelStore from "./misc/channelStore.js";
 
 const log = clog("cmds");
 
@@ -30,13 +31,23 @@ export interface Command {
     admin?: boolean,
     description: string;
     options?: CommandOption[]
-    callback: (info: CommandInfos, client: Client, args: string[]) => Promise<void>;
+    callback: (
+        info: CommandInfos,
+        client: Client,
+        args: string[],
+        store: ChannelStore
+    ) => Promise<void>;
 }
 
 export class CommandsBuilder {
     aliases: Record<string, string> = {};
     commands: Record<string, Command> = {};
     registerCommandsArr: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
+    store: ChannelStore | undefined;
+
+    setStore(store: ChannelStore) {
+        this.store = store;
+    }
 
     exists(name: string) {
         return (!!this.aliases[name]) || (!!this.commands[name]);
@@ -57,7 +68,7 @@ export class CommandsBuilder {
                 return;
             }
         }
-        await cmd.callback(info, client, args);
+        await cmd.callback(info, client, args, this.store as ChannelStore);
     }
 
     async build(rootdir: string) {

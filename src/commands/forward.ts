@@ -3,9 +3,15 @@ import { Command, CommandInfos, CommandOption } from "../commands.js";
 
 import { ParseChannelID } from "../misc/misc.js";
 import { clog } from "../misc/misc.js";
+import ChannelStore from "../misc/channelStore.js";
 const log = clog("cmd: forward");
 
-async function callback(info: CommandInfos, client: Client, args: string[] = []) {
+async function callback(
+    info: CommandInfos,
+    client: Client,
+    args: string[] = [],
+    store: ChannelStore
+) {
     let channel: Channel | null = null;
     let message: string | null = null;;
     if (info instanceof ChatInputCommandInteraction) {

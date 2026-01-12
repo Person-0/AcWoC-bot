@@ -5,8 +5,14 @@ import {
     fetchLeaderboard, LeaderboardRecord } from "../misc/leaderboard.js";
 import { userProfileEmbed } from "./profile.js";
 import { rankPositionMedals, getBasicEmbed } from "../misc/misc.js";
+import ChannelStore from "../misc/channelStore.js";
 
-async function callback(info: CommandInfos, client: Client, args: string[] = []) {
+async function callback(
+    info: CommandInfos,
+    client: Client,
+    args: string[] = [],
+    store: ChannelStore
+) {
     let position = null;
     let wasPositionSupplied = false;
     if (info instanceof ChatInputCommandInteraction) {

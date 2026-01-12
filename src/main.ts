@@ -1,23 +1,37 @@
-import { Client, Events, GatewayIntentBits, MessageFlags } from "discord.js";
+import {
+    Client,
+    Events,
+    GatewayIntentBits,
+    Partials,
+    MessageFlags,
+    TextChannel
+} from "discord.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
 import "./misc/health.js";
 import { CommandsBuilder } from "./commands.js";
 import { clog } from "./misc/misc.js";
+import ChannelStore from "./misc/channelStore.js";
 
 const log = clog("main");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+let Store: ChannelStore;
+const Commands = new CommandsBuilder();
+const PREFIX = process.env.PREFIX || "!";
 
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMessages
-    ]
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages
+    ],
+    partials: [Partials.Channel, Partials.Message]
 });
 
-client.once(Events.ClientReady, (readyClient) => {
+client.once(Events.ClientReady, async (readyClient) => {
     log(`logged in as ${readyClient.user.tag}`);
 
     readyClient.user.setPresence({
@@ -25,10 +39,20 @@ client.once(Events.ClientReady, (readyClient) => {
     });
 
     process.env.BOT_PROFILE_IMG = readyClient.user.displayAvatarURL();
-});
 
-const Commands = new CommandsBuilder();
-const PREFIX = process.env.PREFIX || "!";
+    const storeChannelInstance = await readyClient.channels.fetch(
+        process.env.STORECHANNELID as string
+    );
+    if (storeChannelInstance) {
+        Store = new ChannelStore(
+            "acwoc",
+            storeChannelInstance as TextChannel
+        );
+        Commands.setStore(Store);
+    } else {
+        throw Error("ChannelStore: Store channel not found");
+    }
+});
 
 const listenToCommands = () => {
     client.on("messageCreate", async (message) => {
@@ -62,7 +86,12 @@ const listenToCommands = () => {
             return;
         }
         try {
-            await Commands.execute(interaction.commandName, interaction, [], client);
+            await Commands.execute(
+                interaction.commandName,
+                interaction,
+                [],
+                client
+            );
         } catch (error) {
             log("interaction_error:", error);
             await interaction.followUp({
