@@ -95,17 +95,14 @@ function topThreeEmbed(
         const record = topThreeRecords[rank - 1];
         fields.push({
             name: rankPositionMedals(rank) + " " + record.login,
+            // i wouldve loved to indent this but it appears weird on 
+            // discord android when i do
             value: `
-            Score: \`${record.score}\`
-            Streak: \`${record.streak}\` day${(record.streak > 1 ? "s" : "")}
-            PRs: \`${record.pr_urls.length}\`
-            [View ${record.login}'s Profile](${record.url})
+Score: \`${record.score}\`
+Streak: \`${record.streak}\` day${(record.streak > 1 ? "s" : "")}
+PRs: \`${record.pr_urls.length}\`
+[View ${record.login}'s Profile](${record.url})
             `,
-            inline: false
-        });
-        fields.push({
-            name: "",
-            value: "",
             inline: false
         });
     }

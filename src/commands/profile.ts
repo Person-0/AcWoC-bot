@@ -78,31 +78,21 @@ export function userProfileEmbed(
         {
             name: "Rank",
             value: `**#${rank}**`,
-            inline: true
+            inline: false
         },
         {
             name: "Score",
             value: `\`${record.score}\``,
-            inline: true
-        },
-        {
-            name: "",
-            value: "",
             inline: false
         },
         {
             name: "Streak",
             value: `\`${record.streak}\` Day` + (record.streak > 1 ? "s" : ""),
-            inline: true
+            inline: false
         },
         {
             name: "Total PRs",
             value: `\`${record.pr_urls.length}\``,
-            inline: true
-        },
-        {
-            name: "",
-            value: "",
             inline: false
         },
         {
