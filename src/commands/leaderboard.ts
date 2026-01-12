@@ -98,7 +98,7 @@ function topThreeEmbed(
             // i wouldve loved to indent this but it appears weird on 
             // discord android when i do
             value: `
-Score: \`${record.score}\`
+Points: \`${record.score}\`
 Streak: \`${record.streak}\` day${(record.streak > 1 ? "s" : "")}
 PRs: \`${record.pr_urls.length}\`
 [View ${record.login}'s Profile](${record.url})

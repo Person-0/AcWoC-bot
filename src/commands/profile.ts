@@ -81,7 +81,7 @@ export function userProfileEmbed(
             inline: false
         },
         {
-            name: "Score",
+            name: "Points",
             value: `\`${record.score}\``,
             inline: false
         },
