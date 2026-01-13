@@ -7,8 +7,6 @@ import { setRecord } from "../misc/gitlink.js";
 import { clog } from "../misc/misc.js";
 const log = clog("gitconnect");
 
-const argSchema = z.tuple([z.string().min(1)]);
-
 const accessCodeResSchema = z.object({
     "access_token": z.string().min(1),
     "token_type": z.string().min(1),
@@ -20,31 +18,37 @@ const gitUserSchema = z.object({
     "avatar_url": z.string().startsWith("https://")
 });
 
+const nonCodeReply = (
+    `[Click here](${process.env.GHCODEURL}) to get your GitHub Code.\n` +
+    "After that, use the following command in DMs to connect your " +
+    "GitHub account with this discord account:\n`" +
+    process.env.PREFIX + "gitconnect <GitHub Code>`\n" +
+    "Where <GitHub Code> is the code you got from the website."
+);
+
 async function callback(
     info: CommandInfos,
     client: Client,
     args: string[] = [],
     store: ChannelStore
 ) {
-    if (!(info instanceof Message)) {
-        info.reply("error: text-based only command");
+    const isCodeInvalid = (code: string) =>
+        z.string().min(2).safeParse(code).error;
+
+    let gitCode: string;
+    if (info instanceof Message) {
+        gitCode = args[0];
+    } else {
+        gitCode = info.options.getString("gitCode") || "";
+    }
+    if (isCodeInvalid(gitCode)) {
+        const reply = await info.reply(nonCodeReply);
+        if (reply instanceof Message) { 
+            reply.suppressEmbeds(true);
+        }
         return;
     }
 
-    const parsed = argSchema.safeParse(args);
-    if (parsed.error) {
-        const reply = await info.reply(
-            `[Click here](${process.env.GHCODEURL}) to get your GitHub Code.\n` +
-            "After that, use the following command in DMs to connect your " +
-            "GitHub account with this discord account:\n`" +
-            process.env.PREFIX + "gitconnect <GitHub Code>`\n" +
-            "Where <GitHub Code> is the code you got from the website."
-        )
-        reply.suppressEmbeds(true);
-        return;
-    }
-
-    const gitCode = parsed.data[0];
     const statusMsg = await info.reply("`Verifying GitHub Profile...`");
     const accessCodeRes = await getGitAuthedCodeResponse(gitCode);
     if (!accessCodeRes) {
@@ -63,8 +67,13 @@ async function callback(
         return;
     }
 
-    setRecord(gitUserinfo.login, info.author.id, store);
-    
+    const msgAuthorID = (
+        info instanceof Message ?
+            info.author.id :
+            info.user.id
+    )
+    setRecord(gitUserinfo.login, msgAuthorID, store);
+
     statusMsg.edit(
         "## **`Success`**\n" +
         "Your Discord is now linked with https://github.com/" +
