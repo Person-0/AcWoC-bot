@@ -21,7 +21,7 @@ export type CommandInfos = Message<boolean> | ChatInputCommandInteraction;
 export interface CommandOption {
     name: string;
     description: string;
-    type: 'string' | 'channel';
+    type: 'string' | 'channel' | 'user';
     required?: boolean;
 }
 
@@ -153,6 +153,14 @@ function getBuiltSlashCommand(command: Command) {
                             .setDescription(option.description)
                             .setRequired(option.required || false)
                 );
+                break;
+            case "user":
+                cmddata.addUserOption(
+                    newOp =>
+                        newOp.setName(option.name)
+                            .setDescription(option.description)
+                            .setRequired(option.required || false)
+                )
                 break;
             case "string":
             default:
