@@ -1,13 +1,24 @@
-import { Attachment, AttachmentBuilder, Message, TextChannel } from "discord.js";
+import {
+    Attachment,
+    AttachmentBuilder,
+    Message,
+    TextChannel
+} from "discord.js";
+
+interface CacheData {
+  [key: string]: string | CacheData;
+}
 
 export default class ChannelStore {
-    cache: Record<string, string> = {};
+    cache: CacheData = {};
     channel: TextChannel;
     name: string;
 
     constructor(name: string, channel: TextChannel) {
         if (!(channel.isSendable() && channel.isTextBased())) {
-            throw new Error("ChannelStore: Channel is not sendable / text based!");
+            throw new Error(
+                "ChannelStore: Channel is not sendable / text based!"
+            );
         }
 
         channel.send("ChannelStore initialized");
@@ -20,7 +31,7 @@ export default class ChannelStore {
         return this.cache[key] || undefined;
     }
 
-    set = (key: string, val: string) => {
+    set = (key: string, val: string | CacheData) => {
         this.cache[key] = val;
         this.save();
     }
@@ -73,7 +84,7 @@ export default class ChannelStore {
             let errres = true;
             try {
                 let res = await fetch(result.attachment.url);
-                this.cache = await res.json() as Record<string, string>;
+                this.cache = await res.json() as CacheData;
                 result.message.reply("Using this backup to update cache.");
                 errres = false;
             } catch (e) {
