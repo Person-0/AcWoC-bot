@@ -29,6 +29,7 @@ export interface Command {
     name: string;
     aliases?: string[],
     admin?: boolean,
+    dmOnly?: boolean,
     description: string;
     options?: CommandOption[]
     callback: (
@@ -53,10 +54,22 @@ export class CommandsBuilder {
         return (!!this.aliases[name]) || (!!this.commands[name]);
     }
 
-    async execute(cname: string, info: CommandInfos, args: string[], client: Client) {
+    getActualName(cname: string) {
         let name = cname;
         if (this.aliases[cname]) name = this.aliases[cname];
-        const cmd = this.commands[name];
+        return name;
+    }
+
+    isDmOnly(cname: string) {
+        if(this.exists(cname)) {
+            const name = this.getActualName(cname);
+            return !!this.commands[name].dmOnly;
+        }
+        return false;
+    }
+
+    async execute(cname: string, info: CommandInfos, args: string[], client: Client) {
+        const cmd = this.commands[this.getActualName(cname)];
         if(cmd.admin) {
             let userID: string;
             if(info instanceof ChatInputCommandInteraction) {

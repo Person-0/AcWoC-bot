@@ -4,7 +4,8 @@ import {
     GatewayIntentBits,
     Partials,
     MessageFlags,
-    TextChannel
+    TextChannel,
+    ChannelType
 } from "discord.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -55,6 +56,12 @@ client.once(Events.ClientReady, async (readyClient) => {
 });
 
 const listenToCommands = () => {
+    const replyInDmMsg = (
+        "## **`ERROR`**\n" +
+        "This Command is only available in DMs.\n" +
+        "Please use it by sending a **text-based direct message** to the bot."
+    );
+
     client.on("messageCreate", async (message) => {
         let [command, ...args] = message.content.split(" ");
         command = command.toLowerCase();
@@ -64,27 +71,47 @@ const listenToCommands = () => {
             return;
         }
 
-        if (Commands.exists(command)) {
-            try {
-                Commands.execute(command, message, args, client);
-            } catch (error) {
-                log("message_error:", error);
-                message.reply({
-                    content: "There was an error while executing this command!"
-                });
-            }
-        } else {
+        if (!(Commands.exists(command))) {
             message.reply("Unknown command: `" + command + "`");
+            return;
+        }
+
+        if (
+            Commands.isDmOnly(command) &&
+            !(message.channel.type === ChannelType.DM)
+        ) {
+            message.reply(replyInDmMsg);
+            return;
+        }
+
+        try {
+            Commands.execute(command, message, args, client);
+        } catch (error) {
+            log("message_error:", error);
+            message.reply({
+                content: "There was an error while executing this command!"
+            });
         }
     });
 
     client.on(Events.InteractionCreate, async (interaction) => {
         if (!interaction.isChatInputCommand()) return;
-        const command = Commands.exists(interaction.commandName);
-        if (!command) {
+        if (!(Commands.exists(interaction.commandName))) {
             log(`interaction_error: No command matching ${interaction.commandName} was found.`);
             return;
         }
+
+        if (
+            Commands.isDmOnly(interaction.commandName) &&
+            !(
+                interaction.channel &&
+                interaction.channel.type === ChannelType.DM
+            )
+        ) {
+            interaction.reply(replyInDmMsg);
+            return;
+        }
+
         try {
             await Commands.execute(
                 interaction.commandName,
