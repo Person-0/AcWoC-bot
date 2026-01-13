@@ -28,20 +28,13 @@ Following commands are available with the discord bot.<br>
 - `ping`
   - Shows the time it takes (in milliseconds) for the bot to send a message to discord.
 
-- `forward <channel> <message content>` (ADMIN ONLY)
-  - Sends a text message supplied as an argument to the command to a channel also specified in the command.
-  - Arguments:
-    - ***channel*** can be any text channel's id or direct reference using #channel as long as the bot has permission to send messages in that channel.
-    - ***message content*** limit is 2000 characters, but you should take a margin of ~33 characters since you will not be able to send the command if it exceeds the limit itself, unless you have nitro.
-  - Aliases:
-    `send`, `say`
-  
-- `profile <username>`
-  - Returns the user profile of the specified contributor
+- `gitconnect <(optional) code>`
+  - > This command is DM only<br> i.e you can only use this by directly messaging the bot.
+  - Links a GitHub account with the discord account that used this command using a code obtained from the OAauth app.
   - Arguments
-    - ***username*** is the profile name of the contributor
+    - ***code*** (optional) is the github code obtained from the OAauth app whose link will be provided after running this command without supplying this argument.
   - Aliases:
-    `user`, `pf`, `contributor`, `contrib`
+   `gc`, `gitc`
 
 - `leaderboard <(optional) rank>`
   - If rank is specified, returns the user profile of the contributor at that rank.
@@ -51,6 +44,28 @@ Following commands are available with the discord bot.<br>
   - Aliases:
     `ld`, `leader`, `leaders`
 
+- `profile <GitHub username or @DiscordAccount>`
+  - Returns the user profile of the specified contributor
+  - Arguments
+    - GitHub username of the contributor OR linked discord account @mention of the contributor.
+  - Aliases:
+    `user`, `pf`, `contributor`, `contrib`
+
+- `viewlinked <GitHub username or @DiscordAccount>`
+  - Shows the linked GitHub and Discord account.
+  - Can be used to find the linked discord or the github account of a maintainer / contributor.
+  - Arguments
+    - GitHub username OR @mention linked discord account.
+  - Aliases:
+    `vl`, `vlinked`, `viewl`
+
+- **ADMIN ONLY:** `forward <channel> <message content>`
+  - Sends a text message supplied as an argument to the command to a channel also specified in the command.
+  - Arguments:
+    - ***channel*** can be any text channel's id or direct reference using #channel as long as the bot has permission to send messages in that channel.
+    - ***message content*** limit is 2000 characters, but you should take a margin of ~33 characters since you will not be able to send the command if it exceeds the limit itself, unless you have nitro.
+  - Aliases:
+    `send`, `say`
 
 # Running from Source
 - Ensure you have NodeJS, npm installed.
