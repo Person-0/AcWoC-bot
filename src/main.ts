@@ -59,7 +59,7 @@ const listenToCommands = () => {
     const replyInDmMsg = (
         "## **`ERROR`**\n" +
         "This Command is only available in DMs.\n" +
-        "Please use it by sending a **text-based direct message** to the bot."
+        "Please use it by sending a **direct message** to the bot."
     );
 
     client.on("messageCreate", async (message) => {
