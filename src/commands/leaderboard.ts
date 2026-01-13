@@ -6,6 +6,7 @@ import {
 import { userProfileEmbed } from "./profile.js";
 import { rankPositionMedals, getBasicEmbed } from "../misc/misc.js";
 import ChannelStore from "../misc/channelStore.js";
+import { getDiscordByGitHub } from "../misc/gitlink.js";
 
 async function callback(
     info: CommandInfos,
@@ -74,13 +75,28 @@ async function callback(
             }
 
             const record = records[position - 1];
-            embed = userProfileEmbed(position, record, data.updatedTimestring);
+            embed = userProfileEmbed(
+                position,
+                record,
+                data.updatedTimestring,
+                getDiscordByGitHub(record.login, store)
+            );
 
         } else {
-            embed = topThreeEmbed(records.slice(0, 4), data.updatedTimestring);
+            embed = topThreeEmbed(
+                records.slice(0, 4), 
+                data.updatedTimestring,
+                store
+            );
         }
 
-        await replymsg.edit({ embeds: [embed], content: "" });
+        await replymsg.edit({
+            embeds: [embed],
+            content: "",
+            allowedMentions: {
+                parse: []
+            }
+        });
 
     } else {
         replymsg.edit(
@@ -92,13 +108,16 @@ async function callback(
 }
 
 function topThreeEmbed(
-    topThreeRecords: LeaderboardRecord[], footerText: string
+    topThreeRecords: LeaderboardRecord[],
+    footerText: string,
+    store: ChannelStore
 ) {
     const embed = getBasicEmbed(footerText);
     embed.setTitle("Top 3");
     const fields = [];
     for (let rank = 1; rank <= 3; rank++) {
         const record = topThreeRecords[rank - 1];
+        const discordID = getDiscordByGitHub(record.login, store);
         fields.push({
             name: rankPositionMedals(rank) + " " + record.login,
             // i wouldve loved to indent this but it appears weird on 
@@ -107,6 +126,7 @@ function topThreeEmbed(
 Points: \`${record.score}\`
 Streak: \`${record.streak}\` day${(record.streak > 1 ? "s" : "")}
 PRs: \`${record.pr_urls.length}\`
+Discord: ${discordID ? `<@${discordID}>` : "Not Linked"}
 [View ${record.login}'s Profile](${record.url})
             `,
             inline: false
