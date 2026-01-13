@@ -26,7 +26,7 @@ export function getBasicEmbed(footerText: string) {
         iconURL: process.env.BOT_PROFILE_IMG,
     });
     embed.setThumbnail(process.env.BOT_PROFILE_IMG || null);
-    embed.setColor("#6da3ad");
+    embed.setColor("#112c5c");
     embed.setFooter({ text: footerText });
     return embed;
 }
