@@ -78,6 +78,11 @@ Following commands are available with the discord bot.<br>
         CLIENTID = "<BOT APPLICATION ID>"
         LEADERBOARD_FETCH_URL = "<LEADERBOARD JSON URL>"
         HELP_README_URL = "<LINK TO README.md>"
+        STORECHANNELID = "<CHANNELID FOR SENDING BACKUP STORE JSON>"
+        GHCODEURL = "<OAUTH URL TO GET CODE FOR GITHUB LINKING>"
+        GHCLIENTID = "<GITHUB APP CLIENTID>"
+        GHCLIENTSECRET = "<GITHUB APP CLIENT SECRET>"
+        GHREDIRECTURI = "<GITHUB APP REDIRECT URL>"
         ADMINS = "admin_userid_1,admin_userid_2"
       ```
 - Install dependencies:
