@@ -76,11 +76,14 @@ const listenToCommands = () => {
             return;
         }
 
-        if (
-            Commands.isDmOnly(command) &&
-            !(message.channel.type === ChannelType.DM)
-        ) {
-            message.reply(replyInDmMsg);
+        const isDirectMessage = message.channel.type === ChannelType.DM;
+        const isDMCommand = Commands.isDmOnly(command);
+        if(isDMCommand) {
+            if(!isDirectMessage) {
+                message.reply(replyInDmMsg);
+                return;
+            }
+        } else if(isDirectMessage) {
             return;
         }
 
@@ -101,17 +104,20 @@ const listenToCommands = () => {
             return;
         }
 
-        if (
-            Commands.isDmOnly(interaction.commandName) &&
-            !(
-                interaction.channel &&
-                interaction.channel.type === ChannelType.DM
-            )
-        ) {
-            interaction.reply(replyInDmMsg);
+        const isDirectMessage = (
+            interaction.channel &&
+            interaction.channel.type === ChannelType.DM
+        );
+        const isDMCommand = Commands.isDmOnly(interaction.commandName);
+        if(isDMCommand) {
+            if(!isDirectMessage) {
+                interaction.reply(replyInDmMsg);
+                return;
+            }
+        } else if(isDirectMessage) {
             return;
         }
-
+        
         try {
             await Commands.execute(
                 interaction.commandName,
